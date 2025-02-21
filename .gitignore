@@ -23,7 +23,6 @@ front/dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
 
 # Diretórios de build do backend
