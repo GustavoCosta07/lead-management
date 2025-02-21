@@ -34,6 +34,32 @@ Caso queira acessar o banco de dados diretamente, você pode utilizar ferramenta
 - **Usuário:** `sa`
 - **Senha:** `Admin@123`
 
+## Testando a API via Postman
+A API do backend possui quatro endpoints principais que podem ser testados utilizando o [Postman](https://www.postman.com/) ou qualquer outra ferramenta de requisições HTTP:
+
+- **GET /api/leads** - Retorna todos os leads cadastrados.
+  ```sh
+  GET http://localhost:5000/api/leads
+  ```
+
+- **GET /api/leads/{status}/status** - Retorna os leads filtrados pelo status (`Accepted` ou `Invited`).
+  ```sh
+  GET http://localhost:5000/api/leads/{status}/status
+  ```
+
+- **POST /api/leads/{leadId}/accept** - Aceita um lead específico.
+  ```sh
+  POST http://localhost:5000/api/leads/{guid}/accept
+  ```
+
+- **POST /api/leads/{leadId}/decline** - Recusa um lead específico.
+  ```sh
+  POST http://localhost:5000/api/leads/{guid}/decline
+  ```
+
+Esses endpoints permitem visualizar e gerenciar os leads cadastrados no sistema.
+
+
 ## Executando Testes
 O projeto inclui testes automatizados para o frontend e o backend. Eles podem ser executados manualmente da seguinte forma:
 
