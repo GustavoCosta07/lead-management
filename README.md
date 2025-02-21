@@ -30,6 +30,10 @@ docker-compose logs -f
 - **Backend:** A API está disponível em [http://localhost:5000](http://localhost:5000)
 - **Banco de Dados:** O SQL Server roda na porta `1433`
 
+Caso queira acessar o banco de dados diretamente, você pode utilizar ferramentas como [DBeaver](https://dbeaver.io/) ou SQL Server Management Studio (SSMS). As credenciais padrão do banco são:
+- **Usuário:** `sa`
+- **Senha:** `Admin@123`
+
 ## Executando Testes
 O projeto inclui testes automatizados para o frontend e o backend. Eles podem ser executados manualmente da seguinte forma:
 
@@ -52,4 +56,14 @@ Se encontrar algum erro, verifique os logs do Docker para mais informações:
 ```sh
 docker-compose logs -f
 ```
+
+### Resetando os Dados do Banco
+Os usuários exibidos no frontend são gerados automaticamente quando o projeto é buildado. Caso as interações se esgotem, basta rodar o build novamente para que o banco de dados volte ao estado inicial:
+```sh
+docker-compose down -v
+```
+```sh
+docker-compose up --build
+```
+Isso removerá os volumes do banco de dados e restaurará os dados iniciais.
 
