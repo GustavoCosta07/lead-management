@@ -1,0 +1,40 @@
+.tabs {
+    display: flex;
+    background-color: #ffffff;
+    margin-bottom: 0.625rem;
+    width: 56.25rem;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 0.625rem;
+    color: #7e7e7e;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #ffffff;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.tab-separator {
+    width: 0.0625rem;
+    background-color: #ddd;
+    height: auto;
+    align-self: stretch;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.1875rem;
+    background-color: #FF7A01;
+}

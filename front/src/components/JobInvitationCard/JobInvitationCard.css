@@ -1,0 +1,71 @@
+.invitation {
+    background-color: white;
+    border: 0.0625rem solid #ccc;
+    padding: 0.625rem;
+    margin-bottom: 1.25rem;
+    border-radius: 0.3125rem;
+    max-width: 56.25rem;
+    margin: 0 auto;
+    margin-top: 1.25rem;
+}
+  
+.invitation-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.3125rem;
+}
+  
+.invitation-header > div {
+    margin-left: 0.9375rem;
+}
+  
+.invitation-header h2 {
+    margin: 0;
+    color: #696969;
+    font-size: 0.9em;
+}
+  
+.invitation-header p {
+    margin: 0;
+    margin-top: 0.3125rem;
+    color: #A9A9A9;
+}
+  
+.invitation-details {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 0.3125rem;
+    margin-left: 0.625rem;
+    color: #A9A9A9;
+}
+  
+.invitation-details p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+  
+.invitation-details .icon {
+    color: #696969;
+}
+  
+.fee-and-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+  
+.invitation hr {
+    border: 0;
+    height: 0.0625rem;
+    background: #ccc;
+    width: calc(100% + 1.25rem);
+    margin-left: -0.625rem;
+    margin-top: 0.9375rem;
+    margin-bottom: 0.9375rem;
+}
+  
+.invitation p {
+    color: #A9A9A9;
+}

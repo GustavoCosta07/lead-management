@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Common/AggregateRoot.cs" />
+    <Compile Include="Entities/Lead.cs" />
+    <Compile Include="Enums/LeadStatus.cs" />
+    <Compile Include="Events/BaseDomainEvent.cs" />
+    <Compile Include="Events/LeadAcceptedEvent.cs" />
+    <Compile Include="Events/LeadDeclinedEvent.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Interfaces/ILeadRepository.cs" />
+  </ItemGroup>
+
+</Project>

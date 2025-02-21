@@ -1,0 +1,35 @@
+.custom-button {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.0625rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:hover {
+  filter: brightness(110%);
+}
+
+.custom-button:active {
+  filter: brightness(90%);
+}
+
+.fee-and-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.875rem;
+}
+
+.buttons {
+  display: flex;
+  margin-left: 0.625rem;
+}
+
+.buttons button {
+  margin-right: 0.625rem;
+  font-family: 'Montserrat', sans-serif;
+}

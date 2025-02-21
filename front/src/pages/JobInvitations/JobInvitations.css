@@ -1,0 +1,18 @@
+.outer-container {
+  background-color: #F0F0F0;
+  padding: 1.25rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.job-invitations-container {
+  max-width: 56.25rem;
+  margin: 0 auto;
+}
+
+.Toastify__toast--success {
+  border-left: 0.3125rem solid rgb(6, 179, 6);
+}
+
+.Toastify__toast--error {
+  border-left: 0.3125rem solid rgb(216, 5, 5);
+}

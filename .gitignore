@@ -1,0 +1,90 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node Modules
+front/node_modules
+
+# Dist
+front/dist
+front/dist-ssr
+*.local
+
+# IDEs and Editors
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Diretórios de build do backend
+back/bin
+back/obj
+
+# Configurações específicas do usuário
+back/.vscode/
+back/.idea/
+back/*.user
+
+# Arquivos de log e temporários do backend
+back/*.log
+back/*.tmp
+back/*.swp
+back/*.swo
+back/*.bak
+
+# Configurações do Rider/JetBrains
+back/*.sln.iml
+
+# Configurações do Visual Studio
+back/.vs/
+back/*.suo
+back/*.user
+back/*.cache
+back/*.csproj.user
+back/*.dbmdl
+back/*.jfm
+
+# Arquivos do sistema operacional
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Configurações do DotNet CLI
+back/.config/
+
+# Arquivos gerados pelo .NET
+back/**/bin/
+back/**/obj/
+back/*.csproj.nuget.dgspec.json
+back/*.csproj.nuget.g.props
+back/*.csproj.nuget.g.targets
+back/project.assets.json
+back/project.nuget.cache
+back/staticwebassets.pack.sentinel
+
+# Docker
+docker-compose.override.yml
+.env
+
+# Logs do NuGet
+nuget.exe
+NUGET_PACKAGES/
+
+# Arquivos de cache e de compilação
+back/*.db
+back/*.sqlite
+back/*.ldb
+
+# Configurações específicas do projeto
+back/appsettings.Development.json
+back/secrets.json
