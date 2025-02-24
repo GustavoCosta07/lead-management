@@ -2,8 +2,5 @@ using MediatR;
 
 namespace MyApp.Application.Commands
 {
-    public class DeclineLeadCommand : IRequest
-    {
-        public Guid LeadId { get; set; }
-    }
+    public record DeclineLeadCommand(Guid LeadId) : IRequest;
 }

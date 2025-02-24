@@ -1,7 +1,9 @@
-﻿using MyApp.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MyApp.Application.Interfaces;
 using MyApp.Domain.Events;
 using MyApp.Infrastructure.Persistence;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,10 @@ public class EventStore : IEventStore
     public async Task AppendAsync<T>(T @event) where T : BaseDomainEvent
     {
         var eventType = @event.GetType().Name;
-        var eventData = JsonConvert.SerializeObject(@event);
+        var eventData = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects
+        });
 
         var eventEntity = new Event
         {
@@ -41,6 +46,42 @@ public class EventStore : IEventStore
             .OrderBy(e => e.OccurredOn)
             .ToList();
 
-        return events.Select(e => JsonConvert.DeserializeObject<BaseDomainEvent>(e.Data)).ToList();
+        return events.Select(e => JsonConvert.DeserializeObject<BaseDomainEvent>(e.Data, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects
+        })).ToList();
+    }
+
+    public async Task SaveSnapshotAsync<T>(T snapshot) where T : BaseDomainEvent
+    {
+        var snapshotData = JsonConvert.SerializeObject(snapshot, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects
+        });
+
+        var snapshotEntity = new Event
+        {
+            Id = Guid.NewGuid(),
+            EventType = "Snapshot",
+            Data = snapshotData,
+            OccurredOn = DateTime.UtcNow,
+            AggregateId = snapshot.AggregateId
+        };
+
+        await _dbContext.Events.AddAsync(snapshotEntity);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<T> GetLatestSnapshotAsync<T>(Guid aggregateId) where T : BaseDomainEvent
+    {
+        var snapshot = await _dbContext.Events
+            .Where(e => e.AggregateId == aggregateId && e.EventType == "Snapshot")
+            .OrderByDescending(e => e.OccurredOn)
+            .FirstOrDefaultAsync();
+
+        return snapshot != null ? JsonConvert.DeserializeObject<T>(snapshot.Data, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects
+        }) : null;
     }
 }

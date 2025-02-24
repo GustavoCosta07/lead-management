@@ -15,6 +15,9 @@
     <Compile Include="Events/LeadAcceptedEvent.cs" />
     <Compile Include="Events/LeadDeclinedEvent.cs" />
     <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\LeadCreatedEvent.cs" />
+    <Compile Include="Events\LeadSnapshot.cs" />
+    <Compile Include="Exceptions\AppException.cs" />
     <Compile Include="Interfaces/ILeadRepository.cs" />
   </ItemGroup>
 

@@ -2,6 +2,9 @@ using MediatR;
 using MyApp.Application.Commands;
 using MyApp.Application.Interfaces;
 using MyApp.Domain.Interfaces;
+using MyApp.Domain.Exceptions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyApp.Application.Handlers
 {
@@ -11,7 +14,10 @@ namespace MyApp.Application.Handlers
         private readonly IEmailService _emailService;
         private readonly IEventStore _eventStore;
 
-        public AcceptLeadHandler(ILeadRepository leadRepository, IEmailService emailService, IEventStore eventStore)
+        public AcceptLeadHandler(
+            ILeadRepository leadRepository,
+            IEmailService emailService,
+            IEventStore eventStore)
         {
             _leadRepository = leadRepository;
             _emailService = emailService;
@@ -21,10 +27,12 @@ namespace MyApp.Application.Handlers
         public async Task<Unit> Handle(AcceptLeadCommand request, CancellationToken cancellationToken)
         {
             var lead = await _leadRepository.GetByIdAsync(request.LeadId);
-            if (lead == null) throw new KeyNotFoundException("Lead not found");
+            if (lead == null)
+            {
+                throw new AppException("Lead não encontrado.");
+            }
 
             lead.Accept();
-
             await _leadRepository.UpdateAsync(lead);
 
             foreach (var domainEvent in lead.DomainEvents)
@@ -39,6 +47,4 @@ namespace MyApp.Application.Handlers
             return Unit.Value;
         }
     }
-
-
 }

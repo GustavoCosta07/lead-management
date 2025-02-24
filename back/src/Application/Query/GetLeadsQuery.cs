@@ -1,7 +1,7 @@
 using MediatR;
-using MyApp.Domain.Entities;
+using MyApp.Application.DTOs;
 
 namespace MyApp.Application.Query
 {
-    public record GetLeadsQuery : IRequest<List<Lead>>;
+    public record GetLeadsQuery : IRequest<List<LeadSummaryDto>>;
 }

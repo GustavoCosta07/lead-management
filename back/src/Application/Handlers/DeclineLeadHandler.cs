@@ -2,6 +2,9 @@ using MediatR;
 using MyApp.Application.Commands;
 using MyApp.Application.Interfaces;
 using MyApp.Domain.Interfaces;
+using MyApp.Domain.Exceptions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyApp.Application.Handlers
 {
@@ -10,7 +13,9 @@ namespace MyApp.Application.Handlers
         private readonly ILeadRepository _leadRepository;
         private readonly IEventStore _eventStore;
 
-        public DeclineLeadHandler(ILeadRepository leadRepository, IEventStore eventStore)
+        public DeclineLeadHandler(
+            ILeadRepository leadRepository,
+            IEventStore eventStore)
         {
             _leadRepository = leadRepository;
             _eventStore = eventStore;
@@ -19,7 +24,10 @@ namespace MyApp.Application.Handlers
         public async Task<Unit> Handle(DeclineLeadCommand request, CancellationToken cancellationToken)
         {
             var lead = await _leadRepository.GetByIdAsync(request.LeadId);
-            if (lead == null) throw new KeyNotFoundException("Lead not found");
+            if (lead == null)
+            {
+                throw new AppException("Lead não encontrado.");
+            }
 
             lead.Decline();
             await _leadRepository.UpdateAsync(lead);

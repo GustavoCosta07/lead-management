@@ -7,24 +7,24 @@ namespace MyApp.Domain.Entities
 {
     public class Lead : AggregateRoot
     {
-        public Guid Id { get; private set; }
-        public string? ContactFirstName { get; private set; }
-        public string? ContactFullName { get; private set; }
-        public string? ContactPhoneNumber { get; private set; }
-        public string? ContactEmail { get; private set; }
-        public DateTime DateCreated { get; private set; }
-        public string? Suburb { get; private set; }
-        public string? Category { get; private set; }
-        public string? Description { get; private set; }
-        public decimal Price { get; private set; }
-        public LeadStatus Status { get; private set; }
+        public Guid Id { get; internal set; }
+        public string? ContactFirstName { get; internal set; }
+        public string? ContactFullName { get; internal set; }
+        public string? ContactPhoneNumber { get; internal set; }
+        public string? ContactEmail { get; internal set; }
+        public DateTime DateCreated { get; internal set; }
+        public string? Suburb { get; internal set; }
+        public string? Category { get; internal set; }
+        public string? Description { get; internal set; }
+        public decimal Price { get; internal set; }
+        public LeadStatus Status { get; internal set; }
 
         private readonly List<BaseDomainEvent> _domainEvents = new();
 
         [NotMapped]
         public IReadOnlyCollection<BaseDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-        private Lead() { }
+        public Lead() { }
 
         public Lead(string contactFirstName, string contactFullName, string suburb, string category, string description, decimal price, string email, string contactPhoneNumber)
         {
@@ -65,9 +65,56 @@ namespace MyApp.Domain.Entities
             AddDomainEvent(new LeadDeclinedEvent(Id));
         }
 
+        public void ApplySnapshot(LeadSnapshot snapshot)
+        {
+            this.Id = snapshot.AggregateId;
+            this.ContactFirstName = snapshot.ContactFirstName;
+            this.ContactFullName = snapshot.ContactFullName;
+            this.ContactPhoneNumber = snapshot.ContactPhoneNumber;
+            this.ContactEmail = snapshot.ContactEmail;
+            this.DateCreated = snapshot.DateCreated;
+            this.Suburb = snapshot.Suburb;
+            this.Category = snapshot.Category;
+            this.Description = snapshot.Description;
+            this.Price = snapshot.Price;
+            this.Status = snapshot.Status;
+        }
+
         private void AddDomainEvent(BaseDomainEvent domainEvent)
         {
             _domainEvents.Add(domainEvent);
+        }
+
+        public void Rehydrate(IEnumerable<BaseDomainEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                switch (@event)
+                {
+                    case LeadCreatedEvent createdEvent:
+                        this.Id = createdEvent.LeadId;
+                        this.ContactFirstName = createdEvent.ContactFirstName;
+                        this.ContactFullName = createdEvent.ContactFullName;
+                        this.ContactPhoneNumber = createdEvent.ContactPhoneNumber;
+                        this.ContactEmail = createdEvent.ContactEmail;
+                        this.DateCreated = createdEvent.DateCreated;
+                        this.Suburb = createdEvent.Suburb;
+                        this.Category = createdEvent.Category;
+                        this.Description = createdEvent.Description;
+                        this.Price = createdEvent.Price;
+                        this.Status = LeadStatus.Invited;
+                        break;
+
+                    case LeadAcceptedEvent acceptedEvent:
+                        this.Status = LeadStatus.Accepted;
+                        this.Price = acceptedEvent.FinalPrice;
+                        break;
+
+                    case LeadDeclinedEvent declinedEvent:
+                        this.Status = LeadStatus.Declined;
+                        break;
+                }
+            }
         }
     }
 }
