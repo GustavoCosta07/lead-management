@@ -12,5 +12,7 @@ namespace MyApp.Application.DTOs
         public string Description { get; set; }
         public decimal Price { get; set; }
         public LeadStatus Status { get; set; }
+        public string? ContactPhoneNumber { get; set; }
+        public string? ContactEmail { get; set; }
     }
 }

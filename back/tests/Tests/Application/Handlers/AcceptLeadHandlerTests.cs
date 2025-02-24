@@ -6,6 +6,8 @@ using MyApp.Application.Interfaces;
 using MyApp.Domain.Entities;
 using MyApp.Domain.Interfaces;
 using MyApp.Domain.Events;
+using MyApp.Domain.Exceptions;
+using Xunit;
 
 namespace MyApp.Tests.Application.Handlers
 {
@@ -25,21 +27,20 @@ namespace MyApp.Tests.Application.Handlers
         }
 
         [Fact]
-        public async Task Handle_LeadNotFound_ThrowsKeyNotFoundException()
+        public async Task Handle_LeadNotFound_ThrowsAppException()
         {
-            var command = new AcceptLeadCommand { LeadId = Guid.NewGuid() };
+            var command = new AcceptLeadCommand(Guid.NewGuid(), null, null, null);
             _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync((Lead?)null);
 
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<AppException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
         public async Task Handle_ValidLead_AcceptsLeadAndSendsEmail()
         {
-            var lead = new Lead("John", "Doe", "john.doe@example.com", "1234567890", "Example Company", 1000000M, "Web", "New");
-            lead.ClearDomainEvents();
-            var command = new AcceptLeadCommand { LeadId = lead.Id };
-            _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync((Lead?)lead);
+            var lead = new Lead("John", "John Doe", "New York", "Painting", "Paint the house", 600, "vendas@test.com", "123-456-7890");
+            var command = new AcceptLeadCommand(lead.Id, "John Doe", "123-456-7890", "vendas@test.com");
+            _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync(lead);
 
             var result = await _handler.Handle(command, CancellationToken.None);
 

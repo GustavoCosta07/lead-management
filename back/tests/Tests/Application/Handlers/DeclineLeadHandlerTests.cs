@@ -2,10 +2,12 @@ using MediatR;
 using Moq;
 using MyApp.Application.Commands;
 using MyApp.Application.Handlers;
-using MyApp.Application.Interfaces;
 using MyApp.Domain.Entities;
 using MyApp.Domain.Interfaces;
 using MyApp.Domain.Events;
+using MyApp.Domain.Exceptions;
+using Xunit;
+using MyApp.Application.Interfaces;
 
 namespace MyApp.Tests.Application.Handlers
 {
@@ -23,21 +25,20 @@ namespace MyApp.Tests.Application.Handlers
         }
 
         [Fact]
-        public async Task Handle_LeadNotFound_ThrowsKeyNotFoundException()
+        public async Task Handle_LeadNotFound_ThrowsAppException()
         {
-            var command = new DeclineLeadCommand { LeadId = Guid.NewGuid() };
+            var command = new DeclineLeadCommand(Guid.NewGuid());
             _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync((Lead?)null);
 
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<AppException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
         public async Task Handle_ValidLead_DeclinesLeadAndUpdatesRepository()
         {
-            var lead = new Lead("Jane", "Doe", "jane.doe@example.com", "0987654321", "Another Company", 2000000M, "Referral", "Invited");
-            lead.ClearDomainEvents();
-            var command = new DeclineLeadCommand { LeadId = lead.Id };
-            _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync((Lead?)lead);
+            var lead = new Lead("Jane", "Jane Smith", "Los Angeles", "Cleaning", "Clean the office", 200, "vendas@test.com", "987-654-3210");
+            var command = new DeclineLeadCommand(lead.Id);
+            _mockLeadRepository.Setup(repo => repo.GetByIdAsync(command.LeadId)).ReturnsAsync(lead);
 
             var result = await _handler.Handle(command, CancellationToken.None);
 

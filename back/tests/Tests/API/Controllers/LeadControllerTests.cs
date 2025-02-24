@@ -6,52 +6,52 @@ using MyApp.Domain.Entities;
 using MyApp.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MyApp.Application.DTOs;
+using MyApp.Domain.Enums;
 
 namespace MyApp.Tests.API.Controllers
 {
     public class LeadControllerTests
     {
         private readonly Mock<IMediator> _mockMediator;
-        private readonly Mock<ILeadRepository> _mockLeadRepository;
         private readonly LeadController _controller;
 
         public LeadControllerTests()
         {
             _mockMediator = new Mock<IMediator>();
-            _mockLeadRepository = new Mock<ILeadRepository>();
-            _controller = new LeadController(_mockMediator.Object, _mockLeadRepository.Object);
+            _controller = new LeadController(_mockMediator.Object);
         }
 
         [Fact]
         public async Task GetLeads_ReturnsOkResult_WithListOfLeads()
         {
-            var leads = new List<Lead> 
-            { 
-                new Lead("John", "Doe", "john.doe@example.com", "1234567890", "Example Company", 1000000M, "Web", "New") 
-            };
+            var leads = new List<LeadSummaryDto>
+        {
+            new LeadSummaryDto { Id = Guid.NewGuid(), ContactFirstName = "John", DateCreated = DateTime.UtcNow, Suburb = "Suburb", Category = "Category", Description = "Description", Price = 100, Status = LeadStatus.Invited }
+        };
             _mockMediator.Setup(m => m.Send(It.IsAny<GetLeadsQuery>(), default)).ReturnsAsync(leads);
 
             var result = await _controller.GetLeads();
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnLeads = Assert.IsType<List<Lead>>(okResult.Value);
+            var returnLeads = Assert.IsType<List<LeadSummaryDto>>(okResult.Value);
             Assert.Equal(leads.Count, returnLeads.Count);
         }
 
         [Fact]
         public async Task GetLeadsByStatus_ReturnsOkResult_WithListOfLeads()
         {
-            var status = "New";
-            var leads = new List<Lead> 
-            { 
-                new Lead("Jane", "Doe", "jane.doe@example.com", "0987654321", "Another Company", 2000000M, "Referral", status) 
-            };
+            var status = "Invited";
+            var leads = new List<LeadDetailsDto>
+        {
+            new LeadDetailsDto { Id = Guid.NewGuid(), ContactFirstName = "Jane", DateCreated = DateTime.UtcNow, Suburb = "Suburb", Category = "Category", Description = "Description", Price = 200, Status = LeadStatus.Invited, ContactFullName = "Jane Doe", ContactPhoneNumber = "1234567890", ContactEmail = "jane.doe@example.com" }
+        };
             _mockMediator.Setup(m => m.Send(It.IsAny<GetLeadsByStatusQuery>(), default)).ReturnsAsync(leads);
 
             var result = await _controller.GetLeadsByStatus(status);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnLeads = Assert.IsType<List<Lead>>(okResult.Value);
+            var returnLeads = Assert.IsType<List<LeadDetailsDto>>(okResult.Value);
             Assert.Equal(leads.Count, returnLeads.Count);
         }
 

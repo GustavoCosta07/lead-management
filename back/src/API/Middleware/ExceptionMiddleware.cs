@@ -11,7 +11,7 @@ namespace MyApp.API.Middleware
     {
         private readonly RequestDelegate _next;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> @object)
         {
             _next = next;
         }
